@@ -1,1 +1,1 @@
-web: python app/server.py serve
+web: python app/server_torch.py serve
