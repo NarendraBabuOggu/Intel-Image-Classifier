@@ -15,11 +15,11 @@ export_file_name = 'Intel_image_Classifier.pkl'
 classes = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
 path = Path(__file__).parent
 
-print("Path in Server File :", path)
+#print("Path in Server File :", path)
 
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
-app.mount('/static', StaticFiles(directory='app/static'))
+app.mount('/view', StaticFiles(directory='app/view'))
 
 async def setup_learner():
     try:
