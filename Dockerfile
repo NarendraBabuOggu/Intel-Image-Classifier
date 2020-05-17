@@ -8,10 +8,10 @@ COPY requirements.txt
 
 RUN pip install --upgrade -r requirements.txt
 
-#COPY app app/
+COPY app app/
 
-RUN python server.py
+RUN python app/server_torch.py
 
-EXPOSE 8008
+EXPOSE 5000
 
-CMD ["python", "server.py", "serve"]
+CMD ["python", "app/server_torch.py", "serve"]
