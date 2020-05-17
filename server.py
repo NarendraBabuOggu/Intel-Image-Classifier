@@ -19,7 +19,7 @@ path = Path(__file__).parent
 
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
-app.mount('/view', StaticFiles(directory='app/view'))
+app.mount('', StaticFiles(directory=''))
 
 async def setup_learner():
     try:
@@ -45,7 +45,7 @@ loop.close()
 
 @app.route('/')
 async def homepage(request):
-    html_file = path / 'view' / 'index.html'
+    html_file = path / 'index.html'
     return HTMLResponse(html_file.open(encoding = 'utf-8').read())
 
 
@@ -60,4 +60,4 @@ async def analyze(request):
 
 if __name__ == '__main__':
     if 'serve' in sys.argv:
-        uvicorn.run(app=app, host='0.0.0.0', port=5000, log_level="info")
+        uvicorn.run(app=app, host='0.0.0.0', port=8008, log_level="info")
