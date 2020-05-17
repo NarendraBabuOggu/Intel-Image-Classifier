@@ -9,7 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
-export_file_url = 'https://drive.google.com/uc?export=download&id=1-D_tomTAoQ_wakRPmquwBdChbZzRLg1V'
+#export_file_url = 'https://drive.google.com/uc?export=download&id=1-D_tomTAoQ_wakRPmquwBdChbZzRLg1V'
 export_file_name = 'Intel_image_Classifier.pkl'
 
 classes = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
@@ -22,6 +22,7 @@ app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Reques
 app.mount('/static', StaticFiles(directory='app/static'))
 
 
+"""
 async def download_file(url, dest):
     if dest.exists(): return
     async with aiohttp.ClientSession() as session:
@@ -29,12 +30,15 @@ async def download_file(url, dest):
             data = await response.read()
             with open(dest, 'wb') as f:
                 f.write(data)
-
+"""
 
 async def setup_learner():
     #await download_file(export_file_url, path / export_file_name)
     try:
+        print("Trying to Load Learner")
+        defaults.device = torch.device('cpu')
         learn = load_learner(path, export_file_name)
+        print("Learner Loaded")
         return learn
     except RuntimeError as e:
         if len(e.args) > 0 and 'CPU-only machine' in e.args[0]:
