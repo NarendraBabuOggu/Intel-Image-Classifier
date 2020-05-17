@@ -24,24 +24,21 @@ def image_loader(image_name):
     image = image.unsqueeze(0)  
     return image  
 
-#export_file_url = 'https://drive.google.com/uc?export=download&id=1-D_tomTAoQ_wakRPmquwBdChbZzRLg1V'
 export_file_name = 'IntelImageClassifier.pt'
 
 classes = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
 path = Path(__file__).parent
 
-print("Path in Server File :", path)
-
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
 
-async def setup_model():
+def setup_model():
     try:
-        print("Trying to Load Model")
+        #print("Trying to Load Model")
         model = torch.load(path/export_file_name)
         model.eval()
-        print("Model Loaded")
+        #print("Model Loaded")
         return model
     except RuntimeError as e:
         if len(e.args) > 0 and 'CPU-only machine' in e.args[0]:
@@ -51,12 +48,7 @@ async def setup_model():
         else:
             raise
 
-
-loop = asyncio.get_event_loop()
-tasks = [asyncio.ensure_future(setup_model())]
-model = loop.run_until_complete(asyncio.gather(*tasks))[0]
-loop.close()
-
+model = setup_model()
 
 @app.route('/')
 async def homepage(request):
@@ -76,4 +68,4 @@ async def analyze(request):
 
 if __name__ == '__main__':
     if 'serve' in sys.argv:
-        uvicorn.run(app=app, host='0.0.0.0', port=8008, log_level="info")
+        uvicorn.run(app=app, host='localhost', port=5000, log_level="info")
