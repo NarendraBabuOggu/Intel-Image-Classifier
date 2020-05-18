@@ -3,15 +3,13 @@ FROM python:3.6-slim-stretch
 RUN apt update
 RUN apt install -y python3-dev gcc
 
-
-COPY requirements.txt
-
-RUN pip install --upgrade -r requirements.txt
+ADD requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
 COPY app app/
 
-RUN python app/server_torch.py
+RUN python app/server.py
 
-EXPOSE 5000
+EXPOSE 8080
 
-CMD ["python", "app/server_torch.py", "serve"]
+CMD ["python", "app/server.py", "serve"]
